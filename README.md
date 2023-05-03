@@ -8,8 +8,7 @@ License: MIT
 Uses atprototools for bSky Interopability. https://github.com/ianklatzco/atprototools
 
 Todo List:
-- Error checking.
-- Display posts as Replies, Reposts, etc.
+- Error checking.s
 - Identify pics.
 - Reply, repost, repost with quote.
 
