@@ -82,11 +82,24 @@ if (args.action.lower() == "get"):
         bloot_did = i.get('post').get('author').get('did')
         bloot_did = bloot_did[8:]
         bloot_rkey = str(i.get('post').get('uri')).split("/")[-1]
-        bloot_handle = i.get('post').get('author').get('handle')
+        bloot_handle = str(i.get('post').get('author').get('handle'))
         bloot_replyCount = str(i.get('post').get('replyCount'))
         bloot_repostCount = str(i.get('post').get('repostCount'))
         bloot_likeCount = str(i.get('post').get('likeCount'))
 
+        #Trying to figure out of this is a reply.
+        bloot_reply = str(i.get('post').get('record').get('reply'))
+        if (bloot_reply != "None"):
+            bloot_reply_uri = str(i.get('post').get('record').get('reply').get('parent').get('uri'))
+            ret_json = session.get_bloot_by_url(bloot_reply_uri).json().get('posts')
+            bloot_response_author_handle = str(ret_json[0].get('author').get('displayName'))
+
+        #Trying to figure out if this is a repost.
+        bloot_reason = str(i.get('reason'))
+        if (bloot_reason != "None"):
+            bloot_repost_author_displayName = str(i.get('reason').get('by').get('displayName'))
+
+        #The main text is full of newlines, etc.  Strip them all.
         re.sub('[\W_]+',' ',bloot_text) #strip everyting but letters and characters
         bloot_text = ''.join(bloot_text.split('\n')) #string new lines
         
@@ -95,15 +108,27 @@ if (args.action.lower() == "get"):
 
         print("\033[0;90m-----------------------------------------------------------------")
 
+        if (bloot_reply != "None"): #red
+            print("\033[38;5;124m< Reply to " + bloot_response_author_handle + "\033[0;0m")
+
+        if (bloot_reason != "None"): #orange
+            print("\033[38;5;166m+ Reposted by " + bloot_repost_author_displayName + "\033[0;0m")
+
         print("\033[0;93m[\033[0;0m\033[38;5;159m@" + bloot_handle + "\033[0;93m] \033[1;96m" + bloot_displayName + "\033[1;97m:\n" + 
-                "\033[0;0m\033[38;5;2m" + bloot_text.strip() + "\n"
-                "\033[38;5;236m" + bloot_did + " " + bloot_rkey + "\n"
-                "\033[0;93m(" + 
-                "\033[0;36mReply\033[0;97m: \033[0;37m" + bloot_replyCount + " " +
-                "\033[0;36mRepost\033[0;97m: \033[0;37m" + bloot_repostCount + " " +
-                "\033[0;36mLike\033[0;97m: \033[0;37m" + bloot_likeCount + 
-                "\033[0;93m)")
+            "\033[0;0m\033[38;5;2m" + bloot_text.strip())
+
+        #only print did and rkey if it's your own record that you can delete
+        if (bloot_handle == USERNAME):
+            print("\033[38;5;236m" + bloot_did + " " + bloot_rkey)
+
+        print("\033[0;93m(" + 
+            "\033[0;36mReply\033[0;97m: \033[0;37m" + bloot_replyCount + " " +
+            "\033[0;36mRepost\033[0;97m: \033[0;37m" + bloot_repostCount + " " +
+            "\033[0;36mLike\033[0;97m: \033[0;37m" + bloot_likeCount + 
+            "\033[0;93m)")
         
+
+
     print("\033[0;90m-----------------------------------------------------------------")
 
     print("\n") #Just some padding.
