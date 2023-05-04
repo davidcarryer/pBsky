@@ -25,9 +25,12 @@ import json
 parser = argparse.ArgumentParser(
     prog='pBsky',
     description='Comand line BlueSky client for Linux.')
-parser.add_argument('action')
-parser.add_argument('details') 
-parser.add_argument('more', nargs='?', const=1, type=str)
+parser.add_argument('-p', '--post', type=str,
+                    help='create a post from the given string.')
+parser.add_argument('-d', '--delete', nargs=2,
+                    help='delete a post with given did and rkey.')
+parser.add_argument('-g', '--get', nargs='*',
+                    help='get your last n posts (default 10) or another users last n posts.')
 args = parser.parse_args()
 
 #Open the INI for authentication information.
@@ -44,8 +47,8 @@ session = Session(USERNAME, PASSWORD)
 # Usage (Post Something): ./pBsky.py post {post_text}
 #
 #We want to post something 
-if (args.action.lower() == "post"):
-    session.post_bloot(args.details)
+if (args.post != None):
+    session.post_bloot(args.post)
     # Image Example: session.post_bloot("here's an image!", "path/to/your/image")
 
 #
@@ -53,8 +56,8 @@ if (args.action.lower() == "post"):
 # Usage (Delete Something): ./pBsky.py delete {did} {rkey}
 #
 #We want to post something 
-if (args.action.lower() == "delete"):
-    session.delete_bloot(args.details, args.more)
+if (args.delete != None):
+    session.delete_bloot(args.delete[0], args.delete[1])
 
 #
 # GET
@@ -62,15 +65,15 @@ if (args.action.lower() == "delete"):
 # Usage (Get Specific Timeline + Max Count):  ./pBsky.py get davidcarryer.com 10
 # 
 #We want to get last posts for a user..get('post').get('record').get('text')
-if (args.action.lower() == "get"):
+if (args.get != None):
 
     #Will grab the 'following' timeline when a number is specified.
-    if (args.details.isnumeric()):
-        skyline = session.get_skyline(args.details) #defaults to 10
+    if (args.get[0].isnumeric()):
+        skyline = session.get_skyline(args.get[0]) #defaults to 10
         feed = skyline.json().get('feed')
     else:
         #Will grab the timeline of a specific user.
-        skyline = session.get_latest_n_bloots(args.details,args.more).content
+        skyline = session.get_latest_n_bloots(args.get[0], args.get[1]).content
         feed = json.loads(skyline).get('feed')
 
     print("\n") #Just some padding.
