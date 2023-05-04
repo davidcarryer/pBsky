@@ -76,11 +76,11 @@ if (args.action.lower() == "get"):
     print("\n") #Just some padding.
 
     for i in feed:
-        bloot_text = i.get('post').get('record').get('text')
+        bloot_text = str(i.get('post').get('record').get('text'))
         bloot_cid = str(i.get('post').get('cid'))
-        bloot_displayName = i.get('post').get('author').get('displayName')
-        bloot_did = i.get('post').get('author').get('did')
-        bloot_did = bloot_did[8:]
+        bloot_displayName = str(i.get('post').get('author').get('displayName'))
+        bloot_did = str(i.get('post').get('author').get('did'))
+        bloot_did = str(bloot_did[8:])
         bloot_rkey = str(i.get('post').get('uri')).split("/")[-1]
         bloot_handle = str(i.get('post').get('author').get('handle'))
         bloot_replyCount = str(i.get('post').get('replyCount'))
