@@ -1,6 +1,6 @@
 # pBsky
 
-Python based BlueSky Client for the Linux Command Line.
+Python based BlueSky Client for the Linux Command Line.  This is not intended to be an exhustive client.  Instead it serve's as an example use of the atprototools codebase.
 
 Uses [atprototools](https://github.com/ianklatzco/atprototools) for bSky Interopability.
 
@@ -19,17 +19,15 @@ PASSWORD = your_password
 Run the python script with `python3 pBsky.py --help`, or execute with `./pBsky.py --help` to see available options.
 
 # TODO
+
 Todo List:
-<<<<<<< HEAD
-- Error checking.s
-- Identify pics.
-- Reply, repost, repost with quote.
-=======
+
 - [ ] Error checking.
 - [ ] Identify pics and insert a 'picture' placeholder.
+- [ ] Identify embedded items.
 - [ ] Need to figure out how to repost.
 - [ ] Need to figure out like.
->>>>>>> 817ed115169e7169dfe0d04e0bd24c538f06caa2
+- [ ] Need to figure out follow.
 
 # Extras
 
