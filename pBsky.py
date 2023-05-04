@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #The above line needs to be the first line.  When you chmod the file to an executable and
 #add this line, you can run the file without putting python3 in front of the file.
-#Example: ./pBsky post "This is a test."
+#Example: ./pBsky -p "This is a test."
 
 ####################################################
 # Author: David Carryer 
@@ -15,7 +15,6 @@
 
 #Do my imports
 from atprototools import Session
-import os
 import argparse
 import configparser
 import re
