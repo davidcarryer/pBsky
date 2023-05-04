@@ -20,6 +20,24 @@ import configparser
 import re
 import json
 
+#Colors for Display
+class bColors:
+    REPLY_TO = '\033[95m'
+    REPOSTED_BY = '\033[94m'
+    CLEAR = '\033[0;0m'
+    BRACKET = '\033[0;93m'
+    PAREN = '\033[0;93m'
+    HANDLE = '\033[38;5;159m'
+    DISPLAY_NAME = '\033[1;96m'
+    BASIC = '\033[1;97m'
+    BASIC_LIGHT = '\033[0;37m'
+    REPLY = '\033[0;36m'
+    REPOST = '\033[0;36m'
+    LIKE = '\033[0;36m'
+    IDS = '\033[38;5;236m'
+    POST = '\033[38;5;65m' 
+    DIVIDER = '\033[0;90m'
+
 #Parse the passed arguments
 parser = argparse.ArgumentParser(
     prog='pBsky',
@@ -137,30 +155,27 @@ if (args.get != None):
         #The main text is full of newlines, etc.  Strip them all.
         re.sub('[\W_]+',' ',bloot_text) #strip everyting but letters and characters
         bloot_text = ''.join(bloot_text.split('\n')) #string new lines
-        
-        #I feel like there should be a better cleaner way to deal with colors. \033[0;90m etc.
-        #This works just fine but it just looks messy in the code.
 
-        print("\033[0;90m-----------------------------------------------------------------")
+        print(bColors.DIVIDER + "-----------------------------------------------------------------")
 
         if (bloot_reply != "None"): #red
-            print("\033[38;5;124m< Reply to " + bloot_response_author_handle + "\033[0;0m")
+            print(bColors.REPLY_TO + "< Reply to " + bloot_response_author_handle + bColors.CLEAR)
 
         if (bloot_reason != "None"): #orange
-            print("\033[38;5;166m+ Reposted by " + bloot_repost_author_displayName + "\033[0;0m")
+            print(bColors.REPOSTED_BY + "+ Reposted by " + bloot_repost_author_displayName + bColors.CLEAR)
 
-        print("\033[0;93m[\033[0;0m\033[38;5;159m@" + bloot_handle + "\033[0;93m] \033[1;96m" + bloot_displayName + "\033[1;97m:\n" + 
-            "\033[0;0m\033[38;5;2m" + bloot_text.strip())
+        print(bColors.BRACKET + "[" + bColors.HANDLE +"@" + bloot_handle + bColors.BRACKET +"] " + bColors.DISPLAY_NAME + bloot_displayName + bColors.BASIC + ":" + bColors.CLEAR) 
+        print(bColors.POST + bloot_text.strip())
 
-        #only print did and rkey if it's your own record that you can delete
-        print("\033[38;5;240m" + bloot_did + " " + bloot_rkey)
+        #print did and rkey. needed for delete (if your record) or reply
+        print(bColors.IDS + bloot_did + " " + bloot_rkey)
 
-        print("\033[0;93m(" + 
-            "\033[0;36mReply\033[0;97m: \033[0;37m" + bloot_replyCount + " " +
-            "\033[0;36mRepost\033[0;97m: \033[0;37m" + bloot_repostCount + " " +
-            "\033[0;36mLike\033[0;97m: \033[0;37m" + bloot_likeCount + 
-            "\033[0;93m)")
+        print(bColors.PAREN + "(" + 
+            bColors.REPLY + "Reply" + bColors.BASIC + ": " + bColors.BASIC_LIGHT + bloot_replyCount + " " +
+            bColors.REPOST + "Repost" + bColors.BASIC + ": " + bColors.BASIC_LIGHT + bloot_repostCount + " " +
+            bColors.LIKE + "Like" + bColors.BASIC + ": " + bColors.BASIC_LIGHT + bloot_likeCount + 
+            bColors.PAREN + ")")
         
-    print("\033[0;90m-----------------------------------------------------------------")
+    print(bColors.DIVIDER + "-----------------------------------------------------------------")
 
     print("\n") #Just some padding.
