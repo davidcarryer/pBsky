@@ -26,9 +26,9 @@ Todo List:
 - Reply, repost, repost with quote.
 =======
 - [ ] Error checking.
-- [ ] Display posts as Replies, Reposts, etc.
-- [ ] Identify pics.
-- [ ] Reply, repost, repost with quote.
+- [ ] Identify pics and insert a 'picture' placeholder.
+- [ ] Need to figure out how to repost.
+- [ ] Need to figure out like.
 >>>>>>> 817ed115169e7169dfe0d04e0bd24c538f06caa2
 
 # Extras

@@ -30,6 +30,8 @@ parser.add_argument('-d', '--delete', nargs=2,
                     help='delete a post with given did and rkey.')
 parser.add_argument('-g', '--get', nargs='*',
                     help='get your last n posts (default 10) or another users last n posts.')
+parser.add_argument('-r', '--reply', nargs='*',
+                    help='replay to a post with given string, did, and rkey')
 args = parser.parse_args()
 
 #Open the INI for authentication information.
@@ -49,6 +51,33 @@ session = Session(USERNAME, PASSWORD)
 if (args.post != None):
     session.post_bloot(args.post)
     # Image Example: session.post_bloot("here's an image!", "path/to/your/image")
+
+#
+# REPLY
+# Usage (Reply to Something): ./pBsky.py -r "This is my reply" {rkey}
+#
+#We want to reply to something first_post
+if (args.reply != None):
+
+    #Build the at_uri based on the did and rkey
+    at_uri = "at://did:plc:" + args.reply[1] + "/app.bsky.feed.post/" + args.reply[2]
+
+    original_post = session.get_bloot_by_url(at_uri).json().get('posts')
+
+    #Need to create a dictionary to pass as the reply details.
+    root = {
+        "cid" : original_post[0].get('cid'),
+        "uri" : original_post[0].get('uri')
+    }
+    parent = {
+        "cid" : original_post[0].get('cid'),
+        "uri" : original_post[0].get('uri')
+    }
+    reply_ref = {
+        "root" : root,
+        "parent" : parent
+    } 
+    session.post_bloot(args.reply[0], reply_to=reply_ref)
 
 #
 # DELETE
@@ -88,6 +117,7 @@ if (args.get != None):
         bloot_replyCount = str(i.get('post').get('replyCount'))
         bloot_repostCount = str(i.get('post').get('repostCount'))
         bloot_likeCount = str(i.get('post').get('likeCount'))
+        bloot_uri = str(i.get('post').get('uri'))
 
         #Trying to figure out of this is a reply.
         bloot_reply = str(i.get('post').get('record').get('reply'))
@@ -120,8 +150,7 @@ if (args.get != None):
             "\033[0;0m\033[38;5;2m" + bloot_text.strip())
 
         #only print did and rkey if it's your own record that you can delete
-        if (bloot_handle == USERNAME):
-            print("\033[38;5;236m" + bloot_did + " " + bloot_rkey)
+        print("\033[38;5;240m" + bloot_did + " " + bloot_rkey)
 
         print("\033[0;93m(" + 
             "\033[0;36mReply\033[0;97m: \033[0;37m" + bloot_replyCount + " " +
