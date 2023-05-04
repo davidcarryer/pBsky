@@ -50,6 +50,8 @@ parser.add_argument('-g', '--get', nargs='*',
                     help='get your last n posts (default 10) or another users last n posts.')
 parser.add_argument('-r', '--reply', nargs=3,
                     help='replay to a post with given string, did, and rkey')
+parser.add_argument('-f', '--follow', type=str,
+                    help='follow a user witha given username')
 args = parser.parse_args()
 
 #Open the INI for authentication information.
@@ -109,6 +111,14 @@ if (args.delete != None):
     session.delete_bloot(args.delete[0], args.delete[1])
 
 #
+# FOLLOW
+# Usage (Follow Someone): ./pBsky.py -f {username - without the @}
+#
+#We want to follow someone 
+if (args.follow != None):
+    session.follow(username=args.follow)
+
+#
 # GET
 # Usage (Get Following Timeline + Max Count): ./pBsky.py -g 10
 # Usage (Get Specific Timeline + Max Count):  ./pBsky.py -g davidcarryer.com 10
@@ -129,10 +139,8 @@ if (args.get != None):
 
     for i in feed:
         bloot_text = str(i.get('post').get('record').get('text'))
-        bloot_cid = str(i.get('post').get('cid'))
         bloot_displayName = str(i.get('post').get('author').get('displayName'))
-        bloot_did = str(i.get('post').get('author').get('did'))
-        bloot_did = str(bloot_did[8:])
+        bloot_did = str(i.get('post').get('author').get('did')[8:])
         bloot_rkey = str(i.get('post').get('uri')).split("/")[-1]
         bloot_handle = str(i.get('post').get('author').get('handle'))
         bloot_replyCount = str(i.get('post').get('replyCount'))

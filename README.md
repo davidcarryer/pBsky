@@ -27,7 +27,6 @@ Todo List:
 - [ ] Identify embedded items.
 - [ ] Need to figure out how to repost.
 - [ ] Need to figure out like.
-- [ ] Need to figure out follow.
 
 # Extras
 
