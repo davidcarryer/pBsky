@@ -43,7 +43,7 @@ session = Session(USERNAME, PASSWORD)
 
 #
 # POST
-# Usage (Post Something): ./pBsky.py post {post_text}
+# Usage (Post Something): ./pBsky.py -p {post_text}
 #
 #We want to post something 
 if (args.post != None):
@@ -52,7 +52,7 @@ if (args.post != None):
 
 #
 # DELETE
-# Usage (Delete Something): ./pBsky.py delete {did} {rkey}
+# Usage (Delete Something): ./pBsky.py -d {did} {rkey}
 #
 #We want to post something 
 if (args.delete != None):
@@ -60,8 +60,8 @@ if (args.delete != None):
 
 #
 # GET
-# Usage (Get Following Timeline + Max Count): ./pBsky.py get 10
-# Usage (Get Specific Timeline + Max Count):  ./pBsky.py get davidcarryer.com 10
+# Usage (Get Following Timeline + Max Count): ./pBsky.py -g 10
+# Usage (Get Specific Timeline + Max Count):  ./pBsky.py -g davidcarryer.com 10
 # 
 #We want to get last posts for a user..get('post').get('record').get('text')
 if (args.get != None):
