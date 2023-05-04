@@ -164,7 +164,8 @@ if (args.get != None):
         if (bloot_reason != "None"): #orange
             print(bColors.REPOSTED_BY + "+ Reposted by " + bloot_repost_author_displayName + bColors.CLEAR)
 
-        print(bColors.BRACKET + "[" + bColors.HANDLE +"@" + bloot_handle + bColors.BRACKET +"] " + bColors.DISPLAY_NAME + bloot_displayName + bColors.BASIC + ":" + bColors.CLEAR) 
+        print(bColors.BRACKET + "[" + bColors.HANDLE +"@" + bloot_handle + bColors.BRACKET +"] " + 
+            bColors.DISPLAY_NAME + bloot_displayName + bColors.BASIC + ":" + bColors.CLEAR) 
         print(bColors.POST + bloot_text.strip())
 
         #print did and rkey. needed for delete (if your record) or reply
