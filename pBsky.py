@@ -30,7 +30,7 @@ parser.add_argument('-d', '--delete', nargs=2,
                     help='delete a post with given did and rkey.')
 parser.add_argument('-g', '--get', nargs='*',
                     help='get your last n posts (default 10) or another users last n posts.')
-parser.add_argument('-r', '--reply', nargs='*',
+parser.add_argument('-r', '--reply', nargs=3,
                     help='replay to a post with given string, did, and rkey')
 args = parser.parse_args()
 
@@ -62,6 +62,7 @@ if (args.reply != None):
     #Build the at_uri based on the did and rkey
     at_uri = "at://did:plc:" + args.reply[1] + "/app.bsky.feed.post/" + args.reply[2]
 
+    #Get the post.
     original_post = session.get_bloot_by_url(at_uri).json().get('posts')
 
     #Need to create a dictionary to pass as the reply details.
@@ -77,6 +78,8 @@ if (args.reply != None):
         "root" : root,
         "parent" : parent
     } 
+
+    #Post
     session.post_bloot(args.reply[0], reply_to=reply_ref)
 
 #
