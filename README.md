@@ -29,12 +29,10 @@ GET (Specific Account): ./pBsky.py -g {username - without the @} {return count}
 # TODO
 
 Todo List:
-
+=======
 - [ ] Error checking.
-- [ ] Identify pics and insert a 'picture' placeholder.
-- [ ] Identify embedded items.
-- [ ] Need to figure out how to repost.
-- [ ] Need to figure out like.
+- [ ] Identify pics.
+- [ ] Repost, repost with quote.
 
 # Extras
 
