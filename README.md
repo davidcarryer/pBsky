@@ -20,16 +20,10 @@ Run the python script with `python3 pBsky.py --help`, or execute with `./pBsky.p
 
 # TODO
 Todo List:
-<<<<<<< HEAD
-- Error checking.s
-- Identify pics.
-- Reply, repost, repost with quote.
 =======
 - [ ] Error checking.
-- [ ] Display posts as Replies, Reposts, etc.
 - [ ] Identify pics.
-- [ ] Reply, repost, repost with quote.
->>>>>>> 817ed115169e7169dfe0d04e0bd24c538f06caa2
+- [ ] Repost, repost with quote.
 
 # Extras
 
