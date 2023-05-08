@@ -1,1 +1,1 @@
-atprototools @ git+https://github.com/ianklatzco/atprototools@main
+atprototools @ git+https://github.com/ianklatzco/atprototools@master
