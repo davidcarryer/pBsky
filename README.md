@@ -33,6 +33,7 @@ Todo List:
 - [ ] Error checking.
 - [ ] Identify pics.
 - [ ] Repost, repost with quote.
+- [ ] Like.
 
 # Extras
 
