@@ -69,7 +69,7 @@ session = Session(USERNAME, PASSWORD)
 #
 #We want to post something 
 if (args.post != None):
-    session.post_bloot(args.post)
+    session.postBloot(args.post)
     # Image Example: session.post_bloot("here's an image!", "path/to/your/image")
 
 #
@@ -83,7 +83,7 @@ if (args.reply != None):
     at_uri = "at://did:plc:" + args.reply[1] + "/app.bsky.feed.post/" + args.reply[2]
 
     #Get the post.
-    original_post = session.get_bloot_by_url(at_uri).json().get('posts')
+    original_post = session.getBlootByUrl(at_uri).json().get('posts')
 
     #Need to create a dictionary to pass as the reply details.
     root = {
@@ -100,7 +100,7 @@ if (args.reply != None):
     } 
 
     #Post
-    session.post_bloot(args.reply[0], reply_to=reply_ref)
+    session.postBloot(args.reply[0], reply_to=reply_ref)
 
 #
 # DELETE
@@ -108,7 +108,7 @@ if (args.reply != None):
 #
 #We want to post something 
 if (args.delete != None):
-    session.delete_bloot(args.delete[0], args.delete[1])
+    session.deleteBloot(args.delete[0], args.delete[1])
 
 #
 # FOLLOW
@@ -128,11 +128,11 @@ if (args.get != None):
 
     #Will grab the 'following' timeline when a number is specified.
     if (args.get[0].isnumeric()):
-        skyline = session.get_skyline(args.get[0]) #defaults to 10
+        skyline = session.getSkyline(args.get[0]) #defaults to 10
         feed = skyline.json().get('feed')
     else:
         #Will grab the timeline of a specific user.
-        skyline = session.get_latest_n_bloots(args.get[0], args.get[1]).content
+        skyline = session.getLatestNBloots(args.get[0], args.get[1]).content
         feed = json.loads(skyline).get('feed')
 
     print("\n") #Just some padding.
@@ -152,7 +152,7 @@ if (args.get != None):
         bloot_reply = str(i.get('post').get('record').get('reply'))
         if (bloot_reply != "None"):
             bloot_reply_uri = str(i.get('post').get('record').get('reply').get('parent').get('uri'))
-            ret_json = session.get_bloot_by_url(bloot_reply_uri).json().get('posts')
+            ret_json = session.getBlootByUrl(bloot_reply_uri).json().get('posts')
             bloot_response_author_handle = str(ret_json[0].get('author').get('displayName'))
 
         #Trying to figure out if this is a repost.
