@@ -17,6 +17,14 @@ PASSWORD = your_password
 # Usage
 
 Run the python script with `python3 pBsky.py --help`, or execute with `./pBsky.py --help` to see available options.
+```
+POST: ./pBsky.py -p "{post_text}"
+REPLY: ./pBsky.py -r "This is my reply" {rkey}
+DELETE: ./pBsky.py -d {did} {rkey}
+FOLLOW: ./pBsky.py -f {username - without the @}
+GET (Your Following): ./pBsky.py -g {return count}
+GET (Specific Account): ./pBsky.py -g {username - without the @} {return count}
+```
 
 # TODO
 
