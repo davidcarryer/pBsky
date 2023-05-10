@@ -37,7 +37,8 @@ Todo List:
 
 # Extras
 
-Tested on Ubuntu 22.04.2 LTS VM on a MacBook Pro with Python3
+- Tested on Ubuntu 22.04.2 LTS VM on a MacBook Pro with Python3
+- Best efforts made to align with PEP 8 – Style Guide for Python Code
 
 Original Author: David Carryer\
 Email: david@davidcarryer.com\
