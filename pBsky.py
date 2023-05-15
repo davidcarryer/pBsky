@@ -9,6 +9,7 @@
 
 #Do my imports
 from atprototools import Session
+from utils import *
 import argparse
 import configparser
 import re
@@ -46,6 +47,8 @@ parser.add_argument('-r', '--reply', nargs=3,
                     help='replay to a post with given string, did, and rkey')
 parser.add_argument('-f', '--follow', type=str,
                     help='follow a user with a given username')
+parser.add_argument('-gp', '--getprofile', type=str,
+                    help='get a profile for a user')
 args = parser.parse_args()
 
 #Open the INI for authentication information.
@@ -56,6 +59,43 @@ PASSWORD = config['AUTHENTICATION']['PASSWORD']
 
 #Establish the session
 session = Session(USERNAME, PASSWORD)
+
+
+# GET PROFILE
+# Usage (Get a profile): ./pBsky.py -gp {username - without the @}
+if (args.getprofile != None):
+    profile = session.get_profile(username=args.getprofile)
+    loaded_json = profile.json()
+
+    profile_did = str(loaded_json.get('did'))
+    profile_handle = str(loaded_json.get('handle'))
+    profile_displayName = str(loaded_json.get('displayName'))
+    profile_description = str(loaded_json.get('description'))
+    profile_followsCount = str(loaded_json.get('followsCount'))
+    profile_followersCount = str(loaded_json.get('followersCount'))
+    profile_postsCount = str(loaded_json.get('postsCount'))
+    profile_labels = str(loaded_json.get('labels'))
+
+    print("\n") 
+    print(DC.DIVIDER + "-----------------------------------------------------------------")
+
+    print(DC.BRACKET + "[" + DC.HANDLE +"@" + profile_handle + DC.BRACKET +"] " + 
+        DC.DISPLAY_NAME + profile_displayName + DC.CLEAR) 
+    print(DC.BASIC + profile_description.strip())
+
+    if (profile_labels!="[]"):
+        print(DC.BASIC_LIGHT + "Labels: " + profile_labels)   
+
+    print(DC.IDS + profile_did)    
+
+    print(DC.PAREN + "(" + 
+        DC.REPLY + "Follows" + DC.BASIC + ": " + DC.BASIC_LIGHT + profile_followsCount + " " +
+        DC.REPOST + "Followers" + DC.BASIC + ": " + DC.BASIC_LIGHT + profile_followersCount + " " +
+        DC.LIKE + "Posts" + DC.BASIC + ": " + DC.BASIC_LIGHT + profile_postsCount + 
+        DC.PAREN + ")")
+
+    print(DC.DIVIDER + "-----------------------------------------------------------------")   
+    print("\n") 
 
 
 # POST
