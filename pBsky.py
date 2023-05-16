@@ -7,7 +7,7 @@
 # Uses atprototools for bSky Interopability.
 # https://github.com/ianklatzco/atprototools
 
-#Do my imports
+# Do my imports
 from atprototools import Session
 from utils import *
 import argparse
@@ -15,7 +15,7 @@ import configparser
 import re
 import json
 
-#Display Colors
+# Display Colors
 class DC:
     REPLY_TO = '\033[95m'
     REPOSTED_BY = '\033[94m'
@@ -33,7 +33,7 @@ class DC:
     POST = '\033[38;5;65m' 
     DIVIDER = '\033[0;90m'
 
-#Parse the passed arguments
+# Parse the passed arguments
 parser = argparse.ArgumentParser(
     prog='pBsky',
     description='Comand line BlueSky client for Linux.')
@@ -51,13 +51,13 @@ parser.add_argument('-gp', '--getprofile', type=str,
                     help='get a profile for a user')
 args = parser.parse_args()
 
-#Open the INI for authentication information.
+# Open the INI for authentication information.
 config = configparser.ConfigParser()
 config.read('pBsky.ini')
 USERNAME = config['AUTHENTICATION']['USERNAME'] 
 PASSWORD = config['AUTHENTICATION']['PASSWORD'] 
 
-#Establish the session
+# Establish the session
 session = Session(USERNAME, PASSWORD)
 
 
@@ -80,7 +80,7 @@ if (args.getprofile != None):
     print(DC.DIVIDER + "-----------------------------------------------------------------")
 
     print(DC.BRACKET + "[" + DC.HANDLE +"@" + profile_handle + DC.BRACKET +"] " + 
-        DC.DISPLAY_NAME + profile_displayName + DC.CLEAR) 
+          DC.DISPLAY_NAME + profile_displayName + DC.CLEAR) 
     print(DC.BASIC + profile_description.strip())
 
     if (profile_labels!="[]"):
@@ -89,10 +89,10 @@ if (args.getprofile != None):
     print(DC.IDS + profile_did)    
 
     print(DC.PAREN + "(" + 
-        DC.REPLY + "Follows" + DC.BASIC + ": " + DC.BASIC_LIGHT + profile_followsCount + " " +
-        DC.REPOST + "Followers" + DC.BASIC + ": " + DC.BASIC_LIGHT + profile_followersCount + " " +
-        DC.LIKE + "Posts" + DC.BASIC + ": " + DC.BASIC_LIGHT + profile_postsCount + 
-        DC.PAREN + ")")
+          DC.REPLY + "Follows" + DC.BASIC + ": " + DC.BASIC_LIGHT + profile_followsCount + " " +
+          DC.REPOST + "Followers" + DC.BASIC + ": " + DC.BASIC_LIGHT + profile_followersCount + " " +
+          DC.LIKE + "Posts" + DC.BASIC + ": " + DC.BASIC_LIGHT + profile_postsCount + 
+          DC.PAREN + ")")
 
     print(DC.DIVIDER + "-----------------------------------------------------------------")   
     print("\n") 
@@ -109,13 +109,13 @@ if (args.post != None):
 # Usage (Reply to Something): ./pBsky.py -r "This is my reply" {rkey}
 if (args.reply != None):
 
-    #Build the at_uri based on the did and rkey
+    # Build the at_uri based on the did and rkey
     at_uri = "at://did:plc:" + args.reply[1] + "/app.bsky.feed.post/" + args.reply[2]
 
-    #Get the post.
+    # Get the post.
     original_post = session.getBlootByUrl(at_uri).json().get('posts')
 
-    #Need to create a dictionary to pass as the reply details.
+    # Need to create a dictionary to pass as the reply details.
     root = {
         "cid" : original_post[0].get('cid'),
         "uri" : original_post[0].get('uri')
@@ -129,7 +129,7 @@ if (args.reply != None):
         "parent" : parent
     } 
 
-    #Post
+    # Post
     session.postBloot(args.reply[0], reply_to=reply_ref)
 
 
@@ -150,19 +150,19 @@ if (args.follow != None):
 # Usage (Get Specific Timeline + Max Count):  ./pBsky.py -g davidcarryer.com 10
 if (args.get != None):
 
-    #Will grab the 'following' timeline when a number is specified.
+    # Will grab the 'following' timeline when a number is specified.
     if (args.get[0].isnumeric()):
         skyline = session.getSkyline(args.get[0]) #defaults to 10
         feed = skyline.json().get('feed')
     else:
-        #Will grab the timeline of a specific user.
+        # Will grab the timeline of a specific user.
         skyline = session.getLatestNBloots(args.get[0], args.get[1]).content
         feed = json.loads(skyline).get('feed')
 
     print("\n") 
 
     for i in feed:
-        #Capture all the individual elements that make up a post
+        # Capture all the individual elements that make up a post
         bloot_text = str(i.get('post').get('record').get('text'))
         bloot_displayName = str(i.get('post').get('author').get('displayName'))
         bloot_did = str(i.get('post').get('author').get('did')[8:])
@@ -173,42 +173,42 @@ if (args.get != None):
         bloot_likeCount = str(i.get('post').get('likeCount'))
         bloot_uri = str(i.get('post').get('uri'))
 
-        #Trying to figure out of this is a reply.
+        # Trying to figure out of this is a reply.
         bloot_reply = str(i.get('post').get('record').get('reply'))
         if (bloot_reply != "None"):
             bloot_reply_uri = str(i.get('post').get('record').get('reply').get('parent').get('uri'))
             ret_json = session.getBlootByUrl(bloot_reply_uri).json().get('posts')
             bloot_response_author_handle = str(ret_json[0].get('author').get('displayName'))
 
-        #Trying to figure out if this is a repost.
+        # Trying to figure out if this is a repost.
         bloot_reason = str(i.get('reason'))
         if (bloot_reason != "None"):
             bloot_repost_author_displayName = str(i.get('reason').get('by').get('displayName'))
 
-        #The main text is full of newlines, etc.  Strip them all to jeep display clean.
-        re.sub('[\W_]+',' ',bloot_text) #strip everyting but letters and characters
-        bloot_text = ''.join(bloot_text.split('\n')) #strip out all the specific \n
+        # The main text is full of newlines, etc.  Strip them all to jeep display clean.
+        re.sub('[\W_]+',' ',bloot_text) # strip everyting but letters and characters
+        bloot_text = ''.join(bloot_text.split('\n')) # strip out all the specific \n
 
         print(DC.DIVIDER + "-----------------------------------------------------------------")
 
-        if (bloot_reply != "None"): #red
+        if (bloot_reply != "None"): # red
             print(DC.REPLY_TO + "< Reply to " + bloot_response_author_handle + DC.CLEAR)
 
-        if (bloot_reason != "None"): #orange
+        if (bloot_reason != "None"): # orange
             print(DC.REPOSTED_BY + "+ Reposted by " + bloot_repost_author_displayName + DC.CLEAR)
 
         print(DC.BRACKET + "[" + DC.HANDLE +"@" + bloot_handle + DC.BRACKET +"] " + 
-            DC.DISPLAY_NAME + bloot_displayName + DC.BASIC + ":" + DC.CLEAR) 
+              DC.DISPLAY_NAME + bloot_displayName + DC.BASIC + ":" + DC.CLEAR) 
         print(DC.POST + bloot_text.strip())
 
-        #print did and rkey. needed for delete (if your record) or reply
+        # print did and rkey. needed for delete (if your record) or reply
         print(DC.IDS + bloot_did + " " + bloot_rkey)
 
         print(DC.PAREN + "(" + 
-            DC.REPLY + "Reply" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_replyCount + " " +
-            DC.REPOST + "Repost" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_repostCount + " " +
-            DC.LIKE + "Like" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_likeCount + 
-            DC.PAREN + ")")
+              DC.REPLY + "Reply" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_replyCount + " " +
+              DC.REPOST + "Repost" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_repostCount + " " +
+              DC.LIKE + "Like" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_likeCount + 
+              DC.PAREN + ")")
         
     print(DC.DIVIDER + "-----------------------------------------------------------------")
 
