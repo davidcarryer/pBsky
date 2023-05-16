@@ -46,7 +46,7 @@ packaging==23.1
 pandas==2.0.1
 partd==1.4.0
 pexpect==4.8.0
-Pillow==9.0.1
+Pillow==9.3.0
 pip-tools==6.13.0
 platformdirs==3.5.0
 pooch==1.7.0
