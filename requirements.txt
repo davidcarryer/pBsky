@@ -1,1 +1,0 @@
-atprototools @ git+https://github.com/ianklatzco/atprototools@master
