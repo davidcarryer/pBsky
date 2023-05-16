@@ -162,6 +162,9 @@ if (args.get != None):
     print("\n") 
 
     for i in feed:
+        # spacer to ident reply to make it easier to identify with reply - default no space
+        bloot_spacer = ""
+
         # Capture all the individual elements that make up a post
         bloot_text = str(i.get('post').get('record').get('text'))
         bloot_displayName = str(i.get('post').get('author').get('displayName'))
@@ -191,25 +194,47 @@ if (args.get != None):
 
         print(DC.DIVIDER + "-----------------------------------------------------------------")
 
+        # If this is a reply, post the parent to the reply.
         if (bloot_reply != "None"): # red
+            bloot_spacer = "   " # spacer to ident reply to make it easier to identify with reply
+
             print(DC.REPLY_TO + "< Reply to " + bloot_response_author_handle + DC.CLEAR)
 
+            orig_bloot_text = str(i.get('reply').get('parent').get('record').get('text'))
+            orig_bloot_displayName = str(i.get('reply').get('parent').get('author').get('displayName'))
+            orig_bloot_handle = str(i.get('reply').get('parent').get('author').get('handle'))
+            orig_bloot_did = str(i.get('reply').get('parent').get('author').get('did')[8:])
+            orig_bloot_uri = str(i.get('reply').get('parent').get('uri')).split("/")[-1]
+
+            print(DC.BRACKET + "[" + DC.HANDLE +"@" + orig_bloot_handle + DC.BRACKET +"] " + 
+                  DC.DISPLAY_NAME + orig_bloot_displayName + DC.BASIC + ":" + DC.CLEAR) 
+            print(DC.POST + orig_bloot_text.strip())    
+            print(DC.IDS + orig_bloot_did + " " + orig_bloot_uri)
+
+            print(DC.BASIC_LIGHT + bloot_spacer + "|")
+            print(DC.BASIC_LIGHT + bloot_spacer + "|")
+            print(DC.BASIC_LIGHT + bloot_spacer + "|")
+
+        # Looks like this is a repost.
         if (bloot_reason != "None"): # orange
             print(DC.REPOSTED_BY + "+ Reposted by " + bloot_repost_author_displayName + DC.CLEAR)
 
-        print(DC.BRACKET + "[" + DC.HANDLE +"@" + bloot_handle + DC.BRACKET +"] " + 
+        print(bloot_spacer + DC.BRACKET + "[" + DC.HANDLE +"@" + bloot_handle + DC.BRACKET +"] " + 
               DC.DISPLAY_NAME + bloot_displayName + DC.BASIC + ":" + DC.CLEAR) 
-        print(DC.POST + bloot_text.strip())
+        print(bloot_spacer + DC.POST + bloot_text.strip())
 
         # print did and rkey. needed for delete (if your record) or reply
-        print(DC.IDS + bloot_did + " " + bloot_rkey)
+        print(bloot_spacer + DC.IDS + bloot_did + " " + bloot_rkey)
 
-        print(DC.PAREN + "(" + 
+        print(bloot_spacer + DC.PAREN + "(" + 
               DC.REPLY + "Reply" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_replyCount + " " +
               DC.REPOST + "Repost" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_repostCount + " " +
               DC.LIKE + "Like" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_likeCount + 
               DC.PAREN + ")")
         
+        #if (bloot_reply != "None"): # red
+            #dump_json(i)
+
     print(DC.DIVIDER + "-----------------------------------------------------------------")
 
     print("\n") 
