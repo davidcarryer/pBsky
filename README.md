@@ -24,7 +24,7 @@ DELETE: ./pBsky.py -d {did} {rkey}
 FOLLOW: ./pBsky.py -f {username - without the @}
 GET (Your Following): ./pBsky.py -g {return count}
 GET (Specific Account): ./pBsky.py -g {username - without the @} {return count}
-GET PROFILE (Specific Account): ./pBsky.py -gp {username - without the @} {return count}
+GET PROFILE (Specific Account): ./pBsky.py -gp {username - without the @}
 ```
 
 # TODO
