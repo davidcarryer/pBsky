@@ -32,8 +32,7 @@ GET PROFILE (Specific Account): ./pBsky.py -gp {username - without the @}
 Todo List:
 =======
 - [ ] Error checking.
-- [ ] Identify pics.
-- [ ] Repost, repost with quote.
+- [ ] Display reposts with a quote.
 - [ ] Like.
 
 # Extras

@@ -32,6 +32,8 @@ class DC:
     IDS = '\033[38;5;236m'
     POST = '\033[38;5;65m' 
     DIVIDER = '\033[0;90m'
+    REPLY_BAR = '\033[0;90m'
+    IMAGE = '\033[38;5;220m'
 
 # Parse the passed arguments
 parser = argparse.ArgumentParser(
@@ -175,6 +177,7 @@ if (args.get != None):
         bloot_repostCount = str(i.get('post').get('repostCount'))
         bloot_likeCount = str(i.get('post').get('likeCount'))
         bloot_uri = str(i.get('post').get('uri'))
+        bloot_anyEmbedded = str(i.get('post').get('embed'))
 
         # Trying to figure out of this is a reply.
         bloot_reply = str(i.get('post').get('record').get('reply'))
@@ -201,19 +204,44 @@ if (args.get != None):
             print(DC.REPLY_TO + "< Reply to " + bloot_response_author_handle + DC.CLEAR)
 
             orig_bloot_text = str(i.get('reply').get('parent').get('record').get('text'))
+            re.sub('[\W_]+',' ',orig_bloot_text) # strip everyting but letters and characters
+            orig_bloot_text = ''.join(orig_bloot_text.split('\n')) # strip out all the specific \n
+
             orig_bloot_displayName = str(i.get('reply').get('parent').get('author').get('displayName'))
             orig_bloot_handle = str(i.get('reply').get('parent').get('author').get('handle'))
             orig_bloot_did = str(i.get('reply').get('parent').get('author').get('did')[8:])
             orig_bloot_uri = str(i.get('reply').get('parent').get('uri')).split("/")[-1]
+            orig_bloot_replyCount = str(i.get('reply').get('parent').get('replyCount'))
+            orig_bloot_repostCount = str(i.get('reply').get('parent').get('repostCount'))
+            orig_bloot_likeCount = str(i.get('reply').get('parent').get('likeCount'))
+            orig_bloot_anyEmbedded = str(i.get('reply').get('embed'))
 
             print(DC.BRACKET + "[" + DC.HANDLE +"@" + orig_bloot_handle + DC.BRACKET +"] " + 
                   DC.DISPLAY_NAME + orig_bloot_displayName + DC.BASIC + ":" + DC.CLEAR) 
             print(DC.POST + orig_bloot_text.strip())    
+
+            # any embedded images
+            if (orig_bloot_anyEmbedded != "None"): 
+                if (i.get('post').get('embed').get('$type') == "app.bsky.embed.images#view"):
+                    orig_bloot_images = i.get('post').get('embed').get('images')
+
+                    for j in orig_bloot_images:
+                        orig_bloot_image_alt = j.get('alt')
+                        if (orig_bloot_image_alt == ''):
+                            orig_bloot_image_alt = "No alt text provided."
+                        print(bloot_spacer + DC.IMAGE + "[Embedded Image: " + orig_bloot_image_alt + "]")  
+
             print(DC.IDS + orig_bloot_did + " " + orig_bloot_uri)
 
-            print(DC.BASIC_LIGHT + bloot_spacer + "|")
-            print(DC.BASIC_LIGHT + bloot_spacer + "|")
-            print(DC.BASIC_LIGHT + bloot_spacer + "|")
+            print(DC.PAREN + "(" + 
+                  DC.REPLY + "Reply" + DC.BASIC + ": " + DC.BASIC_LIGHT + orig_bloot_replyCount + " " +
+                  DC.REPOST + "Repost" + DC.BASIC + ": " + DC.BASIC_LIGHT + orig_bloot_repostCount + " " +
+                  DC.LIKE + "Like" + DC.BASIC + ": " + DC.BASIC_LIGHT + orig_bloot_likeCount + 
+                  DC.PAREN + ")")
+
+            print(DC.REPLY_BAR + bloot_spacer + "|")
+            print(DC.REPLY_BAR + bloot_spacer + "|")
+            print(DC.REPLY_BAR + bloot_spacer + "|")
 
         # Looks like this is a repost.
         if (bloot_reason != "None"): # orange
@@ -223,6 +251,17 @@ if (args.get != None):
               DC.DISPLAY_NAME + bloot_displayName + DC.BASIC + ":" + DC.CLEAR) 
         print(bloot_spacer + DC.POST + bloot_text.strip())
 
+        # any embedded images
+        if (bloot_anyEmbedded != "None"): 
+            if (i.get('post').get('embed').get('$type') == "app.bsky.embed.images#view"):
+                bloot_images = i.get('post').get('embed').get('images')
+
+                for j in bloot_images:
+                    bloot_image_alt = j.get('alt')
+                    if (bloot_image_alt == ''):
+                        bloot_image_alt = "No alt text provided."
+                    print(bloot_spacer + DC.IMAGE + "[Embedded Image: " + bloot_image_alt + "]")         
+
         # print did and rkey. needed for delete (if your record) or reply
         print(bloot_spacer + DC.IDS + bloot_did + " " + bloot_rkey)
 
@@ -230,11 +269,10 @@ if (args.get != None):
               DC.REPLY + "Reply" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_replyCount + " " +
               DC.REPOST + "Repost" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_repostCount + " " +
               DC.LIKE + "Like" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_likeCount + 
-              DC.PAREN + ")")
-        
-        #if (bloot_reply != "None"): # red
-            #dump_json(i)
+              DC.PAREN + ")")  
 
     print(DC.DIVIDER + "-----------------------------------------------------------------")
 
     print("\n") 
+
+    
