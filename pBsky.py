@@ -31,6 +31,7 @@ class DC:
     LIKE = '\033[0;36m'
     IDS = '\033[38;5;236m'
     POST = '\033[38;5;65m' 
+    POST_BRIGHT = '\033[38;5;10m' 
     DIVIDER = '\033[0;90m'
     REPLY_BAR = '\033[0;90m'
     IMAGE = '\033[38;5;220m'
@@ -245,7 +246,8 @@ if (args.get != None):
 
         print(bloot_spacer + DC.BRACKET + "[" + DC.HANDLE +"@" + bloot_handle + DC.BRACKET +"] " + 
               DC.DISPLAY_NAME + bloot_displayName + DC.BASIC + ":" + DC.CLEAR) 
-        print(bloot_spacer + DC.POST + bloot_text.strip())
+        
+        print(bloot_spacer + DC.POST_BRIGHT + bloot_text.strip())
 
         # anything embedded?
         if (bloot_anyEmbedded != "None"): #We found something embedded
@@ -261,6 +263,8 @@ if (args.get != None):
             if (i.get('post').get('embed').get('$type') == "app.bsky.embed.record#view"):
                 bloot_spacer = "   " # spacer to ident embedded post
                 embedded_text = i.get('post').get('embed').get('record').get('value').get('text')
+                re.sub('[\W_]+',' ',embedded_text) 
+                embedded_text = ''.join(embedded_text.split('\n')) 
                 embedded_displayName = i.get('post').get('embed').get('record').get('author').get('displayName')
                 embedded_handle = i.get('post').get('embed').get('record').get('author').get('handle')
 
