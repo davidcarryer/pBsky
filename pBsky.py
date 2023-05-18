@@ -177,29 +177,23 @@ if (args.get != None):
         bloot_repostCount = str(i.get('post').get('repostCount'))
         bloot_likeCount = str(i.get('post').get('likeCount'))
         bloot_uri = str(i.get('post').get('uri'))
-        bloot_anyEmbedded = str(i.get('post').get('embed'))
-
-        # Trying to figure out of this is a reply.
-        bloot_reply = str(i.get('post').get('record').get('reply'))
-        if (bloot_reply != "None"):
-            bloot_reply_uri = str(i.get('post').get('record').get('reply').get('parent').get('uri'))
-            ret_json = session.getBlootByUrl(bloot_reply_uri).json().get('posts')
-            bloot_response_author_handle = str(ret_json[0].get('author').get('displayName'))
-
-        # Trying to figure out if this is a repost.
-        bloot_reason = str(i.get('reason'))
-        if (bloot_reason != "None"):
-            bloot_repost_author_displayName = str(i.get('reason').get('by').get('displayName'))
+        bloot_anyEmbedded = str(i.get('post').get('embed'))            
 
         # The main text is full of newlines, etc.  Strip them all to jeep display clean.
         re.sub('[\W_]+',' ',bloot_text) # strip everyting but letters and characters
         bloot_text = ''.join(bloot_text.split('\n')) # strip out all the specific \n
 
-        print(DC.DIVIDER + "-----------------------------------------------------------------")
+        print(DC.DIVIDER + "=================================================================")
+        print('')
 
         # If this is a reply, post the parent to the reply.
-        if (bloot_reply != "None"): # red
+        bloot_reply = str(i.get('post').get('record').get('reply'))
+        if (bloot_reply != "None"):
             bloot_spacer = "   " # spacer to ident reply to make it easier to identify with reply
+
+            bloot_reply_uri = str(i.get('post').get('record').get('reply').get('parent').get('uri'))
+            ret_json = session.getBlootByUrl(bloot_reply_uri).json().get('posts')
+            bloot_response_author_handle = str(ret_json[0].get('author').get('displayName'))
 
             print(DC.REPLY_TO + "< Reply to " + bloot_response_author_handle + DC.CLEAR)
 
@@ -244,16 +238,18 @@ if (args.get != None):
             print(DC.REPLY_BAR + bloot_spacer + "|")
 
         # Looks like this is a repost.
-        if (bloot_reason != "None"): # orange
+        bloot_reason = str(i.get('reason'))
+        if (bloot_reason != "None"):
+            bloot_repost_author_displayName = str(i.get('reason').get('by').get('displayName'))
             print(DC.REPOSTED_BY + "+ Reposted by " + bloot_repost_author_displayName + DC.CLEAR)
 
         print(bloot_spacer + DC.BRACKET + "[" + DC.HANDLE +"@" + bloot_handle + DC.BRACKET +"] " + 
               DC.DISPLAY_NAME + bloot_displayName + DC.BASIC + ":" + DC.CLEAR) 
         print(bloot_spacer + DC.POST + bloot_text.strip())
 
-        # any embedded images
-        if (bloot_anyEmbedded != "None"): 
-            if (i.get('post').get('embed').get('$type') == "app.bsky.embed.images#view"):
+        # anything embedded?
+        if (bloot_anyEmbedded != "None"): #We found something embedded
+            if (i.get('post').get('embed').get('$type') == "app.bsky.embed.images#view"): #The embeeded this is an image
                 bloot_images = i.get('post').get('embed').get('images')
 
                 for j in bloot_images:
@@ -261,6 +257,34 @@ if (args.get != None):
                     if (bloot_image_alt == ''):
                         bloot_image_alt = "No alt text provided."
                     print(bloot_spacer + DC.IMAGE + "[Embedded Image: " + bloot_image_alt + "]")         
+
+            if (i.get('post').get('embed').get('$type') == "app.bsky.embed.record#view"):
+                bloot_spacer = "   " # spacer to ident embedded post
+                embedded_text = i.get('post').get('embed').get('record').get('value').get('text')
+                embedded_displayName = i.get('post').get('embed').get('record').get('author').get('displayName')
+                embedded_handle = i.get('post').get('embed').get('record').get('author').get('handle')
+
+                print('')
+                print(DC.DIVIDER + bloot_spacer + '--------------------------------------------------------------')
+                print(bloot_spacer + DC.BRACKET + "[" + DC.HANDLE +"@" + embedded_handle + DC.BRACKET +"] " + 
+                      DC.DISPLAY_NAME + embedded_displayName + DC.BASIC + ":" + DC.CLEAR)
+                print(bloot_spacer + DC.POST + embedded_text.strip())
+                print(DC.DIVIDER + bloot_spacer + '--------------------------------------------------------------')
+                bloot_spacer = ""
+
+            if (i.get('post').get('embed').get('$type') == "app.bsky.embed.external#view"):
+                bloot_spacer = "   " # spacer to ident embedded post
+                embedded_description = i.get('post').get('embed').get('external').get('description')
+                embedded_title = i.get('post').get('embed').get('external').get('title')
+                embedded_uri = i.get('post').get('embed').get('external').get('uri')
+
+                print('')
+                print(DC.DIVIDER + bloot_spacer + '--------------------------------------------------------------')
+                print(bloot_spacer + DC.POST + embedded_description.strip())
+                print(bloot_spacer + DC.POST + embedded_title.strip())
+                print(bloot_spacer + DC.POST + embedded_uri.strip())
+                print(DC.DIVIDER + bloot_spacer + '--------------------------------------------------------------')
+                bloot_spacer = ""
 
         # print did and rkey. needed for delete (if your record) or reply
         print(bloot_spacer + DC.IDS + bloot_did + " " + bloot_rkey)
@@ -271,7 +295,11 @@ if (args.get != None):
               DC.LIKE + "Like" + DC.BASIC + ": " + DC.BASIC_LIGHT + bloot_likeCount + 
               DC.PAREN + ")")  
 
-    print(DC.DIVIDER + "-----------------------------------------------------------------")
+        print('')
+        
+    print(DC.DIVIDER + "=================================================================")
+
+    #dump_json(i)
 
     print("\n") 
 
