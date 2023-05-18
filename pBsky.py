@@ -34,7 +34,8 @@ class DC:
     POST_BRIGHT = '\033[38;5;10m' 
     DIVIDER = '\033[0;90m'
     REPLY_BAR = '\033[0;90m'
-    IMAGE = '\033[38;5;220m'
+    IMAGE = '\033[38;5;228m'
+    IMAGE_BRACKET = '\033[38;5;220m'
 
 # Parse the passed arguments
 parser = argparse.ArgumentParser(
@@ -101,11 +102,13 @@ if (args.getprofile != None):
     print("\n") 
 
 
+
 # POST
 # Usage (Post Something): ./pBsky.py -p "{post_text" 
 if (args.post != None):
     session.postBloot(args.post)
     # Image Example: session.post_bloot("here's an image!", "path/to/your/image")
+
 
 
 # REPLY
@@ -136,16 +139,19 @@ if (args.reply != None):
     session.postBloot(args.reply[0], reply_to=reply_ref)
 
 
+
 # DELETE
 # Usage (Delete Something): ./pBsky.py -d {did} {rkey}
 if (args.delete != None):
     session.deleteBloot(args.delete[0], args.delete[1])
 
 
+
 # FOLLOW
 # Usage (Follow Someone): ./pBsky.py -f {username - without the @}
 if (args.follow != None):
     session.follow(username=args.follow)
+
 
 
 # GET
@@ -224,7 +230,8 @@ if (args.get != None):
                         orig_bloot_image_alt = j.get('alt')
                         if (orig_bloot_image_alt == ''):
                             orig_bloot_image_alt = "No alt text provided."
-                        print(bloot_spacer + DC.IMAGE + "[Embedded Image: " + orig_bloot_image_alt + "]")  
+                        print(bloot_spacer + DC.IMAGE_BRACKET + "[" + DC.IMAGE + "Embedded Image" + 
+                              DC.BASIC +  ": " + orig_bloot_image_alt + DC.IMAGE_BRACKET + "]")  
 
             print(DC.IDS + orig_bloot_did + " " + orig_bloot_uri)
 
@@ -242,7 +249,7 @@ if (args.get != None):
         bloot_reason = str(i.get('reason'))
         if (bloot_reason != "None"):
             bloot_repost_author_displayName = str(i.get('reason').get('by').get('displayName'))
-            print(DC.REPOSTED_BY + "+ Reposted by " + bloot_repost_author_displayName + DC.CLEAR)
+            print(bloot_spacer + DC.REPOSTED_BY + "+ Reposted by " + bloot_repost_author_displayName + DC.CLEAR)
 
         print(bloot_spacer + DC.BRACKET + "[" + DC.HANDLE +"@" + bloot_handle + DC.BRACKET +"] " + 
               DC.DISPLAY_NAME + bloot_displayName + DC.BASIC + ":" + DC.CLEAR) 
@@ -258,7 +265,8 @@ if (args.get != None):
                     bloot_image_alt = j.get('alt')
                     if (bloot_image_alt == ''):
                         bloot_image_alt = "No alt text provided."
-                    print(bloot_spacer + DC.IMAGE + "[Embedded Image: " + bloot_image_alt + "]")         
+                    print(bloot_spacer + DC.IMAGE_BRACKET + "[" + DC.IMAGE + "Embedded Image" + 
+                              DC.BASIC +  ": " + bloot_image_alt + DC.IMAGE_BRACKET + "]")         
 
             if (i.get('post').get('embed').get('$type') == "app.bsky.embed.record#view"):
                 bloot_spacer = "   " # spacer to ident embedded post
