@@ -430,9 +430,9 @@ def print_embedded_images(images):
     for image_in_list in images:
         bloot_image_alt = image_in_list.get('alt')
         if (bloot_image_alt == ''):
-            bloot_image_alt = "No alt text provided."
-        print(spacer + DC.IMAGE_BRACKET + "[" + DC.IMAGE + "Embedded Image" + 
-              DC.BASIC +  ": " + bloot_image_alt + DC.IMAGE_BRACKET + "]") 
+            bloot_image_alt = "No alt text."
+        print(spacer + DC.IMAGE_BRACKET + "[" + DC.IMAGE + "Image" + DC.CLEAR +  
+              DC.BASIC +  ": " + bloot_image_alt + DC.CLEAR + DC.IMAGE_BRACKET + "]" + DC.CLEAR) 
 
 #
 # Define print_embedded_post
@@ -451,7 +451,7 @@ def print_embedded_post(handle,displayName,text):
 def print_embedded_website(title,description,uri):
     spacer = "   "
     print_thin_divider(spacer)
-    print(spacer + DC.POST + "[" + title + "] " + description + " " + uri)
+    print(spacer + DC.POST + "[" + title + "]: " + description + " " + uri + DC.CLEAR)
     print_thin_divider(spacer)
 
 
