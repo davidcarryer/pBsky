@@ -194,8 +194,9 @@ def get_skeets(my_session,arg0,arg1):
         feed = json.loads(skyline).get('feed')
 
     # Print divider
-    print("\n")
+    print("")
     print_fat_divider()
+    print("")
 
     for i in feed:
         # Capture all the individual elements that make up a post
@@ -207,6 +208,10 @@ def get_skeets(my_session,arg0,arg1):
         bloot_replyCount = str(i.get('post').get('replyCount'))
         bloot_repostCount = str(i.get('post').get('repostCount'))
         bloot_likeCount = str(i.get('post').get('likeCount'))           
+
+        ######################################
+        # Print the parent to post if exists
+        ######################################
 
         # > Reply to ...
         if (str(i.get('post').get('record').get('reply')) != "None"):
@@ -231,25 +236,25 @@ def get_skeets(my_session,arg0,arg1):
             print_original_skeet(orig_bloot_text)
 
             # Anything embedded?
-            if (str(i.get('reply').get('embed')) != "None"): 
+            if (str(i.get('reply').get('parent').get('embed')) != "None"): 
 
                 # Embedded images found
-                if (i.get('post').get('embed').get('$type') == "app.bsky.embed.images#view"):
-                    orig_bloot_images = i.get('post').get('embed').get('images')
+                if (i.get('reply').get('parent').get('embed').get('$type') == "app.bsky.embed.images#view"):
+                    orig_bloot_images = i.get('reply').get('parent').get('embed').get('images')
                     print_embedded_images(orig_bloot_images)
 
                 # Embedded repost found
-                if (i.get('post').get('embed').get('$type') == "app.bsky.embed.record#view"):
-                    orig_embedded_text = clean(str(i.get('post').get('embed').get('record').get('value').get('text')))
-                    orig_embedded_displayName = i.get('post').get('embed').get('record').get('author').get('displayName')
-                    orig_embedded_handle = i.get('post').get('embed').get('record').get('author').get('handle')
+                if (i.get('reply').get('parent').get('embed').get('$type') == "app.bsky.embed.record#view"):
+                    orig_embedded_text = clean(str(i.get('reply').get('parent').get('embed').get('record').get('value').get('text')))
+                    orig_embedded_displayName = i.get('reply').get('parent').get('embed').get('record').get('author').get('displayName')
+                    orig_embedded_handle = i.get('reply').get('parent').get('embed').get('record').get('author').get('handle')
                     print_embedded_post(orig_embedded_handle,orig_embedded_displayName,orig_embedded_text)
 
                 # Embedded website found
-                if (i.get('post').get('embed').get('$type') == "app.bsky.embed.external#view"):
-                    orig_embedded_description = clean(str(i.get('post').get('embed').get('external').get('description')))
-                    orig_embedded_title = clean(str(i.get('post').get('embed').get('external').get('title')))
-                    orig_embedded_uri = i.get('post').get('embed').get('external').get('uri')
+                if (i.get('reply').get('parent').get('embed').get('$type') == "app.bsky.embed.external#view"):
+                    orig_embedded_description = clean(str(i.get('reply').get('parent').get('embed').get('external').get('description')))
+                    orig_embedded_title = clean(str(i.get('reply').get('parent').get('embed').get('external').get('title')))
+                    orig_embedded_uri = i.get('reply').get('parent').get('embed').get('external').get('uri')
                     print_embedded_website(orig_embedded_title,orig_embedded_description,orig_embedded_uri)
 
             # Did and Uri
@@ -261,10 +266,18 @@ def get_skeets(my_session,arg0,arg1):
             # Print reply connector
             print_reply_connector_line()
 
+        ######################################
+        # Print if this is a repost
+        ######################################
+
         # + Reposted by ...
         if (str(i.get('reason')) != "None"):
             bloot_repost_author_displayName = str(i.get('reason').get('by').get('displayName'))
             print_reposted_by(bloot_repost_author_displayName)
+
+        ######################################
+        # Print the post
+        ######################################
 
         # Display name and Handle
         print_handle_bar(bloot_handle,bloot_displayName)
@@ -301,9 +314,11 @@ def get_skeets(my_session,arg0,arg1):
         print_reply_repost_like_bar(bloot_replyCount,bloot_repostCount,bloot_likeCount)
         
         # Print divider
+        print("")
         print_fat_divider()
+        print("")
 
-    print("\n")
+    print("")
 
 ##########################################################################################
 #
