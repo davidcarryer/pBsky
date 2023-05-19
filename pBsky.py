@@ -239,7 +239,7 @@ def get_skeets(my_session,arg0,arg1):
                         orig_bloot_image_alt = j.get('alt')
                         if (orig_bloot_image_alt == ''):
                             orig_bloot_image_alt = "No alt text provided."
-                        print(bloot_spacer + DC.IMAGE_BRACKET + "[" + DC.IMAGE + "Embedded Image" + 
+                        print(DC.IMAGE_BRACKET + "[" + DC.IMAGE + "Embedded Image" + 
                               DC.BASIC +  ": " + orig_bloot_image_alt + DC.IMAGE_BRACKET + "]")  
 
             # Did and Uri
