@@ -330,13 +330,13 @@ def get_skeets(my_session,arg0,arg1):
 # Define print_fat_divider
 #
 def print_fat_divider(spacer=""):
-    print(spacer + DC.DIVIDER + "=================================================================")
+    print(spacer + DC.DIVIDER + "═════════════════════════════════════════════════════════════════")
 
 #
 # Define print_thin_divider
 #
 def print_thin_divider(spacer=""):
-    print(spacer + DC.DIVIDER + "-----------------------------------------------------------------")
+    print(spacer + DC.DIVIDER + "─────────────────────────────────────────────────────────────────")
 
 #
 # Define print_profile_desription
@@ -406,9 +406,9 @@ def print_did_uri(did,uri):
 # Define print_reply_connector_line
 #
 def print_reply_connector_line():
-    print(DC.REPLY_BAR + " | ")
-    print(DC.REPLY_BAR + " | ")
-    print(DC.REPLY_BAR + " | ")
+    print(DC.REPLY_BAR + "   ║")
+    print(DC.REPLY_BAR + "   ║")
+    print(DC.REPLY_BAR + "   ║")
 
 #
 # Define print_skeet
