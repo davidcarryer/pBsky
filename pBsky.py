@@ -194,6 +194,7 @@ def get_skeets(my_session,arg0,arg1):
         feed = json.loads(skyline).get('feed')
 
     # Print divider
+    print("\n")
     print_fat_divider()
 
     for i in feed:
@@ -222,25 +223,34 @@ def get_skeets(my_session,arg0,arg1):
             orig_bloot_replyCount = str(i.get('reply').get('parent').get('replyCount'))
             orig_bloot_repostCount = str(i.get('reply').get('parent').get('repostCount'))
             orig_bloot_likeCount = str(i.get('reply').get('parent').get('likeCount'))
-            orig_bloot_anyEmbedded = str(i.get('reply').get('embed'))
 
             # Display the name and handle
             print_handle_bar(orig_bloot_handle,orig_bloot_displayName)
             
-            # print the skeet
+            # Print the skeet
             print_original_skeet(orig_bloot_text)
 
-            # any embedded images
-            if (orig_bloot_anyEmbedded != "None"): 
+            # Anything embedded?
+            if (str(i.get('reply').get('embed')) != "None"): 
+
+                # Embedded images found
                 if (i.get('post').get('embed').get('$type') == "app.bsky.embed.images#view"):
                     orig_bloot_images = i.get('post').get('embed').get('images')
+                    print_embedded_images(orig_bloot_images)
 
-                    for j in orig_bloot_images:
-                        orig_bloot_image_alt = j.get('alt')
-                        if (orig_bloot_image_alt == ''):
-                            orig_bloot_image_alt = "No alt text provided."
-                        print(DC.IMAGE_BRACKET + "[" + DC.IMAGE + "Embedded Image" + 
-                              DC.BASIC +  ": " + orig_bloot_image_alt + DC.IMAGE_BRACKET + "]")  
+                # Embedded repost found
+                if (i.get('post').get('embed').get('$type') == "app.bsky.embed.record#view"):
+                    orig_embedded_text = clean(str(i.get('post').get('embed').get('record').get('value').get('text')))
+                    orig_embedded_displayName = i.get('post').get('embed').get('record').get('author').get('displayName')
+                    orig_embedded_handle = i.get('post').get('embed').get('record').get('author').get('handle')
+                    print_embedded_post(orig_embedded_handle,orig_embedded_displayName,orig_embedded_text)
+
+                # Embedded website found
+                if (i.get('post').get('embed').get('$type') == "app.bsky.embed.external#view"):
+                    orig_embedded_description = clean(str(i.get('post').get('embed').get('external').get('description')))
+                    orig_embedded_title = clean(str(i.get('post').get('embed').get('external').get('title')))
+                    orig_embedded_uri = i.get('post').get('embed').get('external').get('uri')
+                    print_embedded_website(orig_embedded_title,orig_embedded_description,orig_embedded_uri)
 
             # Did and Uri
             print_did_uri(orig_bloot_did,orig_bloot_uri)
@@ -293,7 +303,7 @@ def get_skeets(my_session,arg0,arg1):
         # Print divider
         print_fat_divider()
 
-
+    print("\n")
 
 ##########################################################################################
 #
@@ -426,7 +436,7 @@ def print_embedded_post(handle,displayName,text):
 def print_embedded_website(title,description,uri):
     spacer = "   "
     print_thin_divider(spacer)
-    print(spacer + DC.POST + "[" + title + "] " + description + uri)
+    print(spacer + DC.POST + "[" + title + "] " + description + " " + uri)
     print_thin_divider(spacer)
 
 
