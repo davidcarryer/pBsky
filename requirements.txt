@@ -71,7 +71,7 @@ pytz==2023.3
 pyxdg==0.28
 PyYAML==6.0
 reportlab==4.0.0
-requests==2.30.0
+requests==2.31.0
 SecretStorage==3.3.3
 six==1.16.0
 systemd-python==235
